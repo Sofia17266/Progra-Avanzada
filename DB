@@ -1,0 +1,47 @@
+--Creación de la base de datos
+CREATE DATABASE GestionTareasDB;
+GO
+
+USE GestionTareasDB;
+
+
+--Creación de tablas necesarias
+
+CREATE TABLE Tab_Tareas (
+    IdTarea INT IDENTITY(1,1) PRIMARY KEY,
+    Titulo NVARCHAR(200) NOT NULL,
+    Descripcion NVARCHAR(MAX),
+    Prioridad NVARCHAR(10) NOT NULL CHECK (Prioridad IN ('Alta', 'Media', 'Baja')),
+    FechaCreacion DATETIME NOT NULL DEFAULT GETDATE(),
+    FechaInicio DATETIME NOT NULL,
+    Estado NVARCHAR(20) NOT NULL CHECK (Estado IN ('Pendiente', 'En Proceso', 'Finalizada', 'Fallida')),
+    Resultado NVARCHAR(MAX),
+    FechaFinalizacion DATETIME  
+);
+
+CREATE TABLE Tab_LogsTareas (
+    IdLog INT IDENTITY(1,1) PRIMARY KEY,
+    IdTarea INT FOREIGN KEY REFERENCES Tab_Tareas(IdTarea),
+    FechaInicio DATETIME NOT NULL,
+    FechaFin DATETIME,
+    Estado NVARCHAR(20) NOT NULL CHECK (Estado IN ('En Proceso', 'Finalizada', 'Fallida')),
+    Mensaje NVARCHAR(MAX), -- Detalle del error o éxito
+    CONSTRAINT FK_LogsTareas_Tarea FOREIGN KEY (IdTarea) REFERENCES Tab_Tareas(IdTarea)
+);
+
+CREATE TABLE Tab_Usuarios (
+    IdUsuario INT IDENTITY(1,1) PRIMARY KEY,
+    Nombre NVARCHAR(100),
+    Email NVARCHAR(200)
+);
+
+CREATE TABLE Tab_Notificaciones (
+    IdNotificacion INT IDENTITY(1,1) PRIMARY KEY,
+    IdTarea INT FOREIGN KEY REFERENCES Tab_Tareas(IdTarea),
+    FechaEnvio DATETIME NOT NULL DEFAULT GETDATE(),
+    Tipo NVARCHAR(20) CHECK (Tipo IN ('Finalizada', 'Fallida')),
+    Destinatario NVARCHAR(200),
+    Descripcion NVARCHAR(MAX)
+);
+
+
