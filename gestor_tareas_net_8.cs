@@ -57,42 +57,6 @@ namespace GestorTareas.Models
     }
 }
 
-// TareasController.cs
-namespace GestorTareas.Controllers
-{
-    public class TareasController : Controller
-    {
-        private readonly ApplicationDbContext _context;
-
-        public TareasController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
-
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Tareas.ToListAsync());
-        }
-
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Tarea tarea)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(tarea);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(tarea);
-        }
-    }
-}
 
 // Views/Tareas/Create.cshtml
 @model GestorTareas.Models.Tarea
