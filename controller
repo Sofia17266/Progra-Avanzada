@@ -1,0 +1,43 @@
+using GestorTareas.Data;
+using GestorTareas.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
+namespace GestorTareas.Controllers
+{
+    public class TareasController : Controller
+    {
+        private readonly ApplicationDbContext _context;
+
+        public TareasController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        // Listar tareas
+        public async Task<IActionResult> Index()
+        {
+            return View(await _context.Tareas.ToListAsync());
+        }
+
+        // Crear tarea (GET)
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // Crear tarea (POST)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Tarea tarea)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(tarea);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(tarea);
+        }
+    }
+}
