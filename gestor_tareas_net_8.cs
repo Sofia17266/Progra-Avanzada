@@ -44,18 +44,7 @@ namespace GestorTareas.Data
     }
 }
 
-// Tarea.cs
-namespace GestorTareas.Models
-{
-    public class Tarea
-    {
-        public int Id { get; set; }
-        public string Titulo { get; set; }
-        public string Descripcion { get; set; }
-        public DateTime FechaCreacion { get; set; } = DateTime.Now;
-        public bool Completada { get; set; }
-    }
-}
+
 
 
 // Views/Tareas/Create.cshtml
